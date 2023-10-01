@@ -1,0 +1,14 @@
+<%-include("header")%>
+    <h1>Update Password</h1>
+    <%=status%>
+    <form action="/users/npass" method="post">
+        Username :
+        <input type="text" name="username" required><br><br>
+        Password :
+        <input type="password" name="password" required><br><br>
+        New Password : 
+        <input type="password" name="nepassword"  required><br><br>
+        <input type="submit">
+
+    </form>
+    <%-include("footer")%>
