@@ -4,6 +4,18 @@ const fs=require("fs");
 const path=require("path");
 const cookieparser=require("cookie-parser");
 const session=require("express-session");
+const client=require("mongodb").MongoClient;
+
+let dbinstance;
+client.connect("mongodb+srv://shivamsk2315:test1@cluster0.xe6okby.mongodb.net/E-Comm")
+  .then((server) => {
+    dbinstance = server.db("E-Comm");
+    console.log("Connected to the database...");
+  })
+  .catch((err) => {
+    console.log("Unable to connect to the database: " + err);
+  });
+
 
 app.use(cookieparser());
 app.set("view engine","ejs");
@@ -57,31 +69,47 @@ else
 
 // })
 app.post("/login",(req,res)=>{
-    //console.log(req.body);
-    fs.readFile("users.txt","utf-8",(err,data)=>{
 
-        let records=JSON.parse(data);
-        let results=records.filter((item)=>{
-            if(item.username==req.body.username && item.password==req.body.password)
-            return true;
-        })
-        if(results.length==0)
-
+    dbinstance.collection("users").find({$and:[{'username':req.body.username},{'password':req.body.password}]}).toArray().then((response)=>
+    {
+        if(response.length==0)
         res.render("login",{"message":"invalid"});
-    else
-    //res.send("Welcome");
-{
-   req.session.username=req.body.username;
-   var n=req.session.username;
-res.render("dashboard",{"uname":n})
-}
-
+    else{
+        req.session.username=req.body.username;
+        var n=req.session.username;
+        res.render("dashboard",{"uname":n})
+        }
     })
-
 })
 
 
-app.post("/")
+//     console.log(req.body);
+//     fs.readFile("users.txt","utf-8",(err,data)=>{
+
+//         let records=JSON.parse(data);
+//         let results=records.filter((item)=>{
+//             if(item.username==req.body.username && item.password==req.body.password)
+//             return true;
+//         })
+//         if(results.length==0)
+
+//         res.render("login",{"message":"invalid"});
+//     else
+//     //res.send("Welcome");
+// {
+//    req.session.username=req.body.username;
+//    var n=req.session.username;
+// res.render("dashboard",{"uname":n})
+// }
+
+    // })
+
+//     dbinstance.collection("users").find({"username":req.body.username,"password":req.body.password}).toArray((err,data)=>{
+
+
+
+
+
 
 //express
 //express-session

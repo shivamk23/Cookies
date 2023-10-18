@@ -1,9 +1,18 @@
-<%-include("header")%>
-       <%=message %>        <form action="/login" method="post">
-            Username <input type="text" name="username"/>
-            Password <input type="password" name="password"/>
-            <input type="submit"/>
+<%- include("header") %>
 
-        </form>
-        <%-include("footer")%>
+<style>
+  .message {
+    color: red; /* Change the color to your desired style */
+    font-weight: bold; /* Add other styles as needed */
+  }
+</style>
 
+<%= message %>
+
+<form action="/login" method="post">
+  Username <input type="text" name="username" />
+  Password <input type="password" name="password" />
+  <input type="submit" />
+</form>
+
+<%- include("footer") %>
